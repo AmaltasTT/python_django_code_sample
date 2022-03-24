@@ -1,0 +1,158 @@
+{% extends "admin/base_generic.html" %}
+{% block content %}
+<p class="font-weight-bold">APPLICANT DETAILS - <i>{{ fullname }}</i></p>
+{% if checkstatus == 'No' %}
+<p>Check Status: <i>not checked</i></p>
+<p><a href="javascript: domarkaschecked({{ id }});">Mark as Checked</a></p>
+{% else %}
+<p>Check Status: <i>checked on {{ checkedondate }}</i></p>
+{% endif %}
+
+<p><button type="button" data-toggle="modal" data-target="#MessageModal" class="btn btn-primary btn-sm">Message</button>&nbsp;<button type="button" data-toggle="modal" data-target="#EmailModal" class="btn btn-primary btn-sm">Email</button> </p>
+
+<br>
+
+<button data-toggle="collapse" class="btn btn-primary" data-target="#personal_info">Personal Information</button>
+<div id="personal_info" class="collapse">
+<br></br>   
+  <div class="jumbotron">
+{% for x in personalinfo %}      
+  <p>Full Name: <b>{{ x.fullname }}</b></p>
+  <p>Pet Name: <b>{{ x.petname }}</b></p>
+  <p>Father Name: <b>{{ x.fathername }}</b></p>
+  <p>Mother Name: <b>{{ x.mothername }}</b></p>
+  <p>City: <b>{{ x.city }}</b></p>
+  <p>Address: <b>{{ x.address }}</b></p>
+  <p>Pin Code: <b>{{ x.pincode }}</b></p>
+  <p>Mobile Number: <b>{{ x.mobilenumber }}</b></p>
+  <p>Alternate Number: <b>{{ x.alternatenumber }}</b></p>
+  <p>Gender: <b>{{ x.gender }}</b></p>
+  <p>Date Of Birth: <b>{{ x.dateofbirth }}</b></p>
+  <p>Weight: <b>{{ x.weight }}</b></p>
+  <p>Height: <b>{{ x.height }}</b></p>
+{% endfor %}  
+  </div>
+</div> 
+
+<br><br>
+
+<button data-toggle="collapse" class="btn btn-primary" data-target="#portfolio_info">Photo PortFolio</button>
+<div id="portfolio_info" class="collapse">
+<br></br>   
+   <div class="jumbotron">
+   <p>Photos submitted by {{ fullname }}</p>
+   <table class="table-dark">
+   <tbody>
+    {% for z in portfolio %}   
+       <tr>
+           <td><a href="/media/{{ z.facephoto }}" target="_blank"><img src="/media/{{ z.facephoto }}" id="facephotoimg" alt="facephoto" width="250px" height="200px"/></a></td>
+           <td><a href="/media/{{ z.standingposephoto }}" target="_blank"><img src="/media/{{ z.standingposephoto }}" id="standingposeimg" alt="standingpose" width="250px" height="200px"/></a></td>
+           <td><a href="/media/{{ z.sideposephoto }}" target="_blank"><img src="/media/{{ z.sideposephoto }}" id="sideposeimg" alt="sideposephoto" width="250px" height="200px"/></a></td>
+           <td><a href="/media/{{ z.stylishposephoto }}" target="_blank"><img src="/media/{{ z.stylishposephoto }}" id="stylishposeimg" alt="stylishposephoto" width="250px" height="200px"/></a></td>
+       </tr>
+       <tr>
+           <td><b>FacePhoto</b></td>
+           <td><b>StandingPosePhoto</b></td>
+           <td><b>SidePosePhoto</b></td>
+           <td><b>StylishPosePhoto</b></td>
+       </tr>
+    {% endfor %}   
+   </tbody>    
+   </table>
+   </div>
+ </div>  
+
+<br><br>
+
+<button data-toggle="collapse" class="btn btn-primary" data-target="#describeyourself_div">About Self</button>
+<div id="describeyourself_div" class="collapse">
+<br></br>
+<div class="jumbotron">
+{% for w in selftext %}    
+<p>The following lines were submitted by {{ fullname }} on {{ w.date_created }}.
+<br></br>
+<b>{{ w.selftext }}</b>
+</p>
+{% endfor %}
+</div>
+</div>
+<div id="fakediv" style="display:none"></div>
+
+
+<!-- The Modal to send message-->
+<div class="modal" id="MessageModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Send Message To {{ fullname }}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form id="messageform" action="" method="POST" onsubmit="send_message();">
+          {% csrf_token %}
+        <div class="form-group">
+          <label for="message"><b>Message:</b></label><br>
+          <textarea class="form-control" id="message" name="message" rows="5" cols="50"></textarea>
+        </div>
+          <input type="hidden" name="id" value='{{ id }}' />
+        <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" id="closemessagemodal" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- The Modal to send Email -->
+<div class="modal" id="EmailModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Send Email To {{ fullname }}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form id="emailform" action="" method="POST" onsubmit="send_email();">
+          {% csrf_token %}
+        <div class="form-group">
+            <label for="to"><b>To:</b></label><br>
+            <input type="text" class="form-control" id="to" name="to" cols="50" value="{{ email }}"/>
+        </div>  
+        <div class="form-group">
+          <label for="subject"><b>Subject:</b></label><br>
+          <input type="text" class="form-control" id="subject" name="subject" cols="50" value="VIPNAMES update" />
+      </div>
+        <div class="form-group">
+          <label for="message"><b>Message:</b></label><br>
+          <textarea class="form-control" id="message" name="message" rows="5" cols="50"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" id="closeemailmodal" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

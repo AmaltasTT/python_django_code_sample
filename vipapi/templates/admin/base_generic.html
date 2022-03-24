@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block title %}<title>VIPNAMES Administration</title>{% endblock %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}">
+<script type='text/javascript' src='{% static 'js/jquery-3.3.1.min.js' %}'></script>
+<script type='text/javascript' src='{% static 'js/bootstrap.min.js' %}'></script>
+<script type='text/javascript' src='{% static 'js/script.js' %}'></script>
+</head>
+
+<body>
+  <div class="container">
+  {% block sidebar %}
+  <!-- insert default navigation text for every page -->
+<table class="table table-primary">
+  <tr>
+    <td><h2><b>VIPNAMES Administration</b></h2></td>
+    <td><a href="/admin/logout/"><button class="btn btn-success">logout</button></a></td>
+  </tr>
+</table>
+<hr></hr>
+  {% endblock %}
+  {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+  </div>
+</body>
+</html>

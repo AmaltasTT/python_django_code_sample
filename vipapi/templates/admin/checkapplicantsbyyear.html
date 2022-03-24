@@ -1,0 +1,27 @@
+{% load static %}
+<table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>RegisteredOn</th>
+            <th>ProfileCompleted</th>
+            <th>CheckedByAdmin</th>
+            <th>ApplicantID</th>
+            <th>Actions</th>
+        </tr>
+    {% for x in applicantlist %}
+        <tr>
+            <td>{{ x.name }}</td>
+            <td>{{ x.email }}</td>
+            <td>{{ x.registeredon }}</td>
+            {% if x.profilepercent == '100%' %}
+            <td><p style="color:green;"><b>{{ x.profilepercent }}</b></p></td>
+            {% else %}
+            <td>{{ x.profilepercent }}</td>
+            {% endif %}
+            <td>{{ x.checkedbyadmin }}</td>
+            <td>{{ x.applicantid }}</td>
+            <td><a href="#"><img src="{% static 'icons/eye.png' %}" width="40" height="20" /></a>&nbsp;<a href="javascript: deleteapplicantaccount({{ x.id }});"><img src="{% static 'icons/delete.jpg' %}" width="40" height="20" /></a></td>
+        </tr>
+    {% endfor %}  
+    </table>  

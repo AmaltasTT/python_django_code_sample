@@ -1,0 +1,3 @@
+id,last_login,is_superuser,first_name,last_name,is_staff,is_active,date_joined,name,email,password,mobile_number,username
+1,2018-12-01 04:01:05.148000,1,,,1,1,2018-11-28 06:36:39.430773,,avtarsingh450@gmail.com,pbkdf2_sha256$36000$wmqoJp2dHu5H$AIpRvKD/eCjs3ZGEHyDPHPJ7uyg8aTXrIUP8z9MjRNM=,9988583997,root
+2,,0,,,0,1,2018-11-30 16:16:44.293000,Avtar Singh,avtar_450@yahoo.co.in,avtar450,9988583997,

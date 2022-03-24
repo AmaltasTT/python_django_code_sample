@@ -1,0 +1,67 @@
+{% extends "admin/base_generic.html" %}
+{% block content %}
+{% load static %}
+<h class="font-weight-bold">APPLICANTS CURRENT LIST</h>
+<br><br>
+<label><i>for year &nbsp;</i></label>
+<select id="selectyearvalue" onchange="javascript: applicantlist();">
+    {% for z in yearlist %}
+    <option value='{{ z }}'>{{ z }}</option>
+    {% endfor %}
+</select>
+<br>
+<div id="applicantdisplaypane">
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>RegisteredOn</th>
+        <th>ProfileCompleted</th>
+        <th>CheckedByAdmin</th>
+        <th>ApplicantID</th>
+        <th>Actions</th>
+    </tr>
+{% for x in applicantlist %}
+    <tr>
+        <td>{{ x.name }}</td>
+        <td>{{ x.email }}</td>
+        <td>{{ x.registeredon }}</td>
+        {% if x.profilepercent == '100%' %}
+        <td><p style="color:green;"><b>{{ x.profilepercent }}</b></p></td>
+        {% else %}
+        <td>{{ x.profilepercent }}</td>
+        {% endif %}
+        <td>{{ x.checkedbyadmin }}</td>
+        <td>{{ x.applicantid }}</td>
+        <td><a href="/applicantdetails/{{ x.id }}" target="_blank"><img src="{% static 'icons/eye.png' %}" width="40" height="20" /></a>&nbsp;<a href="javascript: deleteapplicantaccount({{ x.id }});"><img src="{% static 'icons/delete.jpg' %}" width="40" height="20" /></a></td>
+    </tr>
+{% endfor %}  
+</table>  
+</div>
+
+<!-- The Modal to show deletion confirmation dialog -->
+<div class="modal" id="DeleteModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Delete Account</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+        <p>Are you sure you want to delete this user account? The user will not be able to log in and his/her data will be lost forever. Proceed?</p>
+        <button type="button" class="btn btn-primary" onclick="dodeleteapplicantaccount();">Yes</button>
+        <button type="button" id="closedeletemodal" class="btn btn-danger" data-dismiss="modal">No</button>
+        </div>
+    
+      </div>
+    </div>
+  </div>
+
+  <button type="button" style="display:none;" data-toggle="modal" data-target="#DeleteModal" id="deletemodalbutton"></button> 
+  <input type="hidden" id="storeapplicantid" /> 
+
+{% endblock %}
